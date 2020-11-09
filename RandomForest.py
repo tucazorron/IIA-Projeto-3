@@ -1,13 +1,131 @@
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import pandas as pd
 import Dataset
 
-def create():
+def covid_binary(value):
+    if value == "negative":
+        return 0
+    else:
+        return 1
 
-    model = RandomForestClassifier(n_estimators = 100)
-    variables = ["Patient age quantile", "Patient addmited to regular ward (1=yes, 0=no)", "Patient addmited to semi-intensive unit (1=yes, 0=no)", "Patient addmited to intensive care unit (1=yes, 0=no)"]
+def home_treatment(v1, v2, v3):
+    if v1 + v2 + v3 == 0:
+        return 1
+    else:
+        return 0
+
+def Covid():
+
+    print("\n>> Resultados de Covid:\n")
+    print(Dataset.matrix["SARS-Cov-2 exam result"].value_counts())
+    print()
+
+    clf = RandomForestClassifier(n_estimators = 100)
+
+    variables = ["Patient age quantile", "Patient addmited to regular ward (1=yes, 0=no)", "Patient addmited to semi-intensive unit (1=yes, 0=no)", "Patient addmited to intensive care unit (1=yes, 0=no)", "Hematocrit", "Hemoglobin", "Platelets", "Mean platelet volume ", "Lymphocytes", "Mean corpuscular hemoglobin concentration (MCHC)", "Leukocytes", "Basophils", "Mean corpuscular hemoglobin (MCH)", "Eosinophils", "Mean corpuscular volume (MCV)", "Monocytes", "Red blood cell distribution width (RDW)", "Serum Glucose", "Neutrophils", "Urea", "Proteina C reativa mg/dL", "Creatinine", "Potassium", "Sodium", "Alanine transaminase", "Aspartate transaminase", "Ionized calcium "]
     x = Dataset.matrix[variables]
     x = x.fillna(0)
     y = Dataset.matrix["SARS-Cov-2 exam result"]
-    model.fit(x, y)
-    p = model.predict(x)
-    print(p)
+
+    clf.fit(x, y)
+    results = clf.predict(x)
+    print(f"Precisão de {accuracy_score(y, results)}")
+
+    columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
+    columns_relevance.sort_values("Importancia", ascending = False)
+    print(columns_relevance.head(10))
+
+def RegularWard():
+
+    print("\n>> Pacientes em enfermaria normal:\n")
+    print(Dataset.matrix["Patient addmited to regular ward (1=yes, 0=no)"].value_counts())
+    print()
+
+    clf = RandomForestClassifier(n_estimators = 100)
+
+    Dataset.matrix["CovidBinario"] = Dataset.matrix["SARS-Cov-2 exam result"].map(covid_binary)
+
+    variables = ["Patient age quantile", "CovidBinario", "Patient addmited to semi-intensive unit (1=yes, 0=no)", "Patient addmited to intensive care unit (1=yes, 0=no)", "Hematocrit", "Hemoglobin", "Platelets", "Mean platelet volume ", "Lymphocytes", "Mean corpuscular hemoglobin concentration (MCHC)", "Leukocytes", "Basophils", "Mean corpuscular hemoglobin (MCH)", "Eosinophils", "Mean corpuscular volume (MCV)", "Monocytes", "Red blood cell distribution width (RDW)", "Serum Glucose", "Neutrophils", "Urea", "Proteina C reativa mg/dL", "Creatinine", "Potassium", "Sodium", "Alanine transaminase", "Aspartate transaminase", "Ionized calcium "]
+    x = Dataset.matrix[variables]
+    x = x.fillna(0)
+    y = Dataset.matrix["Patient addmited to regular ward (1=yes, 0=no)"]
+
+    clf.fit(x, y)
+    results = clf.predict(x)
+    print(f"Precisão de {accuracy_score(y, results)}")
+
+    columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
+    columns_relevance.sort_values("Importancia", ascending = False)
+    print(columns_relevance.head(10))
+
+def SemiIntensiveUnit():
+
+    print("\n>> Pacientes em unidades de tratamento semi-intensivas:\n")
+    print(Dataset.matrix["Patient addmited to semi-intensive unit (1=yes, 0=no)"].value_counts())
+    print()
+
+    clf = RandomForestClassifier(n_estimators = 100)
+
+    Dataset.matrix["CovidBinario"] = Dataset.matrix["SARS-Cov-2 exam result"].map(covid_binary)
+
+    variables = ["Patient age quantile", "CovidBinario", "Patient addmited to regular ward (1=yes, 0=no)", "Patient addmited to intensive care unit (1=yes, 0=no)", "Hematocrit", "Hemoglobin", "Platelets", "Mean platelet volume ", "Lymphocytes", "Mean corpuscular hemoglobin concentration (MCHC)", "Leukocytes", "Basophils", "Mean corpuscular hemoglobin (MCH)", "Eosinophils", "Mean corpuscular volume (MCV)", "Monocytes", "Red blood cell distribution width (RDW)", "Serum Glucose", "Neutrophils", "Urea", "Proteina C reativa mg/dL", "Creatinine", "Potassium", "Sodium", "Alanine transaminase", "Aspartate transaminase", "Ionized calcium "]
+    x = Dataset.matrix[variables]
+    x = x.fillna(0)
+    y = Dataset.matrix["Patient addmited to semi-intensive unit (1=yes, 0=no)"]
+
+    clf.fit(x, y)
+    results = clf.predict(x)
+    print(f"Precisão de {accuracy_score(y, results)}")
+
+    columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
+    columns_relevance.sort_values("Importancia", ascending = False)
+    print(columns_relevance.head(10))
+
+def IntensiveCareUnit():
+
+    print("\n>> Pacientes em unidades de tratamento intensivas:\n")
+    print(Dataset.matrix["Patient addmited to intensive care unit (1=yes, 0=no)"].value_counts())
+    print()
+
+    clf = RandomForestClassifier(n_estimators = 100)
+
+    Dataset.matrix["CovidBinario"] = Dataset.matrix["SARS-Cov-2 exam result"].map(covid_binary)
+
+    variables = ["Patient age quantile", "CovidBinario", "Patient addmited to semi-intensive unit (1=yes, 0=no)", "Patient addmited to regular ward (1=yes, 0=no)", "Hematocrit", "Hemoglobin", "Platelets", "Mean platelet volume ", "Lymphocytes", "Mean corpuscular hemoglobin concentration (MCHC)", "Leukocytes", "Basophils", "Mean corpuscular hemoglobin (MCH)", "Eosinophils", "Mean corpuscular volume (MCV)", "Monocytes", "Red blood cell distribution width (RDW)", "Serum Glucose", "Neutrophils", "Urea", "Proteina C reativa mg/dL", "Creatinine", "Potassium", "Sodium", "Alanine transaminase", "Aspartate transaminase", "Ionized calcium "]
+    x = Dataset.matrix[variables]
+    x = x.fillna(0)
+    y = Dataset.matrix["Patient addmited to intensive care unit (1=yes, 0=no)"]
+
+    clf.fit(x, y)
+    results = clf.predict(x)
+    print(f"Precisão de {accuracy_score(y, results)}")
+
+    columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
+    columns_relevance.sort_values("Importancia", ascending = False)
+    print(columns_relevance.head(10))
+
+# def Home():
+
+#     Dataset.matrix["HomeTreatment"] = Dataset.matrix["Patient addmited to regular ward (1=yes, 0=no)", "Patient addmited to semi-intensive unit (1=yes, 0=no)", "Patient addmited to intensive care unit (1=yes, 0=no)"].map(home_treatment)
+
+#     print("\n>> Pacientes tratados em casa:\n")
+#     print(Dataset.matrix["HomeTreatment"].value_counts())
+#     print()
+
+#     clf = RandomForestClassifier(n_estimators = 100)
+
+#     Dataset.matrix["CovidBinario"] = Dataset.matrix["SARS-Cov-2 exam result"].map(covid_binary)
+
+#     variables = ["Patient age quantile", "CovidBinario", "Patient addmited to semi-intensive unit (1=yes, 0=no)", "Patient addmited to intensive care unit (1=yes, 0=no)", "Hematocrit", "Hemoglobin", "Platelets", "Mean platelet volume ", "Lymphocytes", "Mean corpuscular hemoglobin concentration (MCHC)", "Leukocytes", "Basophils", "Mean corpuscular hemoglobin (MCH)", "Eosinophils", "Mean corpuscular volume (MCV)", "Monocytes", "Red blood cell distribution width (RDW)", "Serum Glucose", "Neutrophils", "Urea", "Proteina C reativa mg/dL", "Creatinine", "Potassium", "Sodium", "Alanine transaminase", "Aspartate transaminase", "Ionized calcium "]
+#     x = Dataset.matrix[variables]
+#     x = x.fillna(0)
+#     y = Dataset.matrix["Patient addmited to regular ward (1=yes, 0=no)"]
+
+#     clf.fit(x, y)
+#     results = clf.predict(x)
+#     print(f"Precisão de {accuracy_score(y, results)}")
+
+#     columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
+#     columns_relevance.sort_values("Importancia", ascending = False)
+#     print(columns_relevance.head(10))

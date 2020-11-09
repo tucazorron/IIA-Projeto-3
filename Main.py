@@ -1,6 +1,11 @@
 import RandomForest
 
 def main():
-    RandomForest.create()
+
+    RandomForest.Covid()
+    RandomForest.RegularWard()
+    RandomForest.SemiIntensiveUnit()
+    RandomForest.IntensiveCareUnit()
+    # RandomForest.Home()
 
 main()

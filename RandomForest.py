@@ -17,7 +17,7 @@ def home_treatment(v1, v2, v3):
 
 def Covid():
 
-    print("\n>> Resultados de Covid:\n")
+    print("\n--------------------------------\n\n>> PACIENTES COM COVID:\n")
     print(Dataset.matrix["SARS-Cov-2 exam result"].value_counts())
     print()
 
@@ -30,7 +30,7 @@ def Covid():
 
     clf.fit(x, y)
     results = clf.predict(x)
-    print(f"Precisão de {accuracy_score(y, results)}")
+    print(f"Precisão de {accuracy_score(y, results)}\n")
 
     columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
     columns_relevance.sort_values("Importancia", ascending = False)
@@ -38,7 +38,7 @@ def Covid():
 
 def RegularWard():
 
-    print("\n>> Pacientes em enfermaria normal:\n")
+    print("\n--------------------------------\n\n>> PACIENTES EM ENFERMARIA REGULAR:\n")
     print(Dataset.matrix["Patient addmited to regular ward (1=yes, 0=no)"].value_counts())
     print()
 
@@ -53,7 +53,7 @@ def RegularWard():
 
     clf.fit(x, y)
     results = clf.predict(x)
-    print(f"Precisão de {accuracy_score(y, results)}")
+    print(f"Precisão de {accuracy_score(y, results)}\n")
 
     columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
     columns_relevance.sort_values("Importancia", ascending = False)
@@ -61,7 +61,7 @@ def RegularWard():
 
 def SemiIntensiveUnit():
 
-    print("\n>> Pacientes em unidades de tratamento semi-intensivas:\n")
+    print("\n--------------------------------\n\n>> PACIENTES EM UNIDADES DE TRATAMENTO SEMI-INTENSIVAS:\n")
     print(Dataset.matrix["Patient addmited to semi-intensive unit (1=yes, 0=no)"].value_counts())
     print()
 
@@ -76,7 +76,7 @@ def SemiIntensiveUnit():
 
     clf.fit(x, y)
     results = clf.predict(x)
-    print(f"Precisão de {accuracy_score(y, results)}")
+    print(f"Precisão de {accuracy_score(y, results)}\n")
 
     columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
     columns_relevance.sort_values("Importancia", ascending = False)
@@ -84,7 +84,7 @@ def SemiIntensiveUnit():
 
 def IntensiveCareUnit():
 
-    print("\n>> Pacientes em unidades de tratamento intensivas:\n")
+    print("\n--------------------------------\n\n>> PACIENTES EM UNIDADES DE TRATAMENTO INTENSIVAS:\n")
     print(Dataset.matrix["Patient addmited to intensive care unit (1=yes, 0=no)"].value_counts())
     print()
 
@@ -99,11 +99,13 @@ def IntensiveCareUnit():
 
     clf.fit(x, y)
     results = clf.predict(x)
-    print(f"Precisão de {accuracy_score(y, results)}")
+    print(f"Precisão de {accuracy_score(y, results)}\n")
 
     columns_relevance = pd.DataFrame({"Variavel": list(x.columns), "Importancia": clf.feature_importances_})
     columns_relevance.sort_values("Importancia", ascending = False)
     print(columns_relevance.head(10))
+
+    print("\n--------------------------------")
 
 # def Home():
 
